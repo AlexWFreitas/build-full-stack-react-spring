@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SingleContact from './SingleContact';
 import AddContacts from './AddContacts';
+const client = require('../utils/Client');
 
 export default class Contacts extends Component {
 	constructor(props) {
@@ -11,12 +12,9 @@ export default class Contacts extends Component {
 	}
 
 	componentDidMount() {
-		let x = fetch("http://localhost:8080/api/contacts")
-		  .then(response => response.json())
-		  .then(data => this.setState({contacts: data}))
-		  .catch((err) => {
-			console.log(err);
-		  })		  
+		let x = client({method: 'GET', path: 'http://localhost:8080/api/contacts'}).then(response => {
+			this.setState({contacts: response.entity._embedded.contacts});
+		});	  
 	}
 
 	render() {
